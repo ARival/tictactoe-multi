@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { TTTPhase } from '../model/TicTacToeData'
+import { ImTrophy } from 'react-icons/im'
+import { GiShrug } from 'react-icons/gi'
+import { IoSkullSharp } from 'react-icons/io5'
 
 interface Props {
   show: boolean,
@@ -73,6 +76,30 @@ const Title = styled.h1`
   padding: 0;
   margin: 0;
 `
+enum ResultType {
+  WIN,
+  LOSE,
+  DRAW,
+  NONE
+}
+
+const getResult = (state: any, isHost: boolean): ResultType => {
+  if (state.phase === TTTPhase.DRAW) return ResultType.DRAW
+
+  if (isHost) {
+    if(state.phase === TTTPhase.WINNER_PLAYER_X) {
+      return ResultType.WIN
+    } else {
+      return ResultType.LOSE
+    }
+  } else {
+    if(state.phase === TTTPhase.WINNER_PLAYER_O) {
+      return ResultType.WIN
+    } else {
+      return ResultType.LOSE
+    }
+  }
+}
 
 const TicTacToePostGameModal = ({show, state, isHost, handleHostGame}: Props) => {
   const [fetching, setFetching] = useState(false)
@@ -129,14 +156,19 @@ const TicTacToePostGameModal = ({show, state, isHost, handleHostGame}: Props) =>
     })
   }
 
+  const result = getResult(state, isHost)
+
   return (
     <Modal show={show}>
+      <div>
+        {result === ResultType.WIN && <ImTrophy size={200} color="#ECCC00"/>}
+        {result === ResultType.LOSE && <IoSkullSharp size={200} color="#882200"/>}
+        {result === ResultType.DRAW && <GiShrug size={200} color="#ffffff"/>}
+      </div>
       <Title>
-        {isHost && state.phase === TTTPhase.WINNER_PLAYER_X && 'You Win!'}
-        {isHost && state.phase === TTTPhase.WINNER_PLAYER_O && 'You Lose!'}
-        {!isHost && state.phase === TTTPhase.WINNER_PLAYER_O && 'You Win!'}
-        {!isHost && state.phase === TTTPhase.WINNER_PLAYER_X && 'You Lose!'}
-        {state.phase === TTTPhase.DRAW && 'Draw!'}
+        {result === ResultType.WIN && 'You Win!'}
+        {result === ResultType.LOSE && 'You Lose!'}
+        {result === ResultType.DRAW && 'Draw!'}
       </Title>
       <ModalButtonContainer>
         <ModalButton disabled={fetching} onClick={() => {fetchRestart(state)}}>

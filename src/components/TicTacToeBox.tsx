@@ -17,6 +17,10 @@ const TTTBoxContainer = styled.button`
   box-sizing: border-box;
   cursor: pointer;
   border: none;
+  :disabled {
+    pointer-events: none;
+    cursor: default;
+  }
 `
 export interface Props {
   state: {
@@ -26,13 +30,14 @@ export interface Props {
   }
   clickCallback: React.MouseEventHandler<HTMLButtonElement>;
   id: string;
+  isTurn: boolean;
 }
 
 const TicTacToeBox = (props: Props) => {
   const boxInfo = props.state.boxes[props.id]
   const Icon: IconType = IconDict[boxInfo === 1 ? props.state.playerXIcon : props.state.playerOIcon]
   return (
-    <TTTBoxContainer id={props.id} onClick={props.clickCallback}>
+    <TTTBoxContainer disabled={!props.isTurn} id={props.id} onClick={props.clickCallback}>
         {boxInfo !== 0 && <Icon style={{
           pointerEvents: 'none',
           color: boxInfo === 1 ? 'red' : 'blue',

@@ -39,6 +39,20 @@ const TTTRow = styled.div`
   gap: 8pt;
   flex-direction: row;
 `
+
+const Name = styled.h2`
+  pointer-events: none;
+  font-size: 1.5em;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  background-color: #ccc;
+  padding: 16px;
+  border-radius: 12px;
+`
+
+
 const TicTacToePlayfield = ({state, isHost, handleHostGame}: Props) => {
   
   const clickHandler = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -67,32 +81,40 @@ const TicTacToePlayfield = ({state, isHost, handleHostGame}: Props) => {
     })
   }
 
+  const isTurn = (isHost && state.phase === TTTPhase.PLAYER_X) || (!isHost && state.phase === TTTPhase.PLAYER_O)
+
   return (
-    <div>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
       <TicTacToePostGameModal
         state={state}
         show={state.phase === TTTPhase.WINNER_PLAYER_X || state.phase === TTTPhase.WINNER_PLAYER_O || state.phase === TTTPhase.DRAW}
         isHost={isHost}
         handleHostGame={handleHostGame}
       />
-      <SubTitle>{(isHost && state.phase === TTTPhase.PLAYER_X) || (!isHost && state.phase === TTTPhase.PLAYER_O) ? "YOUR MOVE" : "OPPONENT'S MOVE"}</SubTitle>
+      <SubTitle>{isTurn ? "YOUR MOVE" : "OPPONENT'S MOVE"}</SubTitle>
       <MainContainer className="App">
         <TTTRow>
-          <TicTacToeBox id="1" clickCallback={clickHandler} state={state}/>
-          <TicTacToeBox id="2" clickCallback={clickHandler} state={state}/>
-          <TicTacToeBox id="3" clickCallback={clickHandler} state={state}/>
+          <TicTacToeBox id="1" isTurn={isTurn} clickCallback={clickHandler} state={state}/>
+          <TicTacToeBox id="2" isTurn={isTurn} clickCallback={clickHandler} state={state}/>
+          <TicTacToeBox id="3" isTurn={isTurn} clickCallback={clickHandler} state={state}/>
         </TTTRow>
         <TTTRow>
-          <TicTacToeBox id="4" clickCallback={clickHandler} state={state}/>
-          <TicTacToeBox id="5" clickCallback={clickHandler} state={state}/>
-          <TicTacToeBox id="6" clickCallback={clickHandler} state={state}/>
+          <TicTacToeBox id="4" isTurn={isTurn} clickCallback={clickHandler} state={state}/>
+          <TicTacToeBox id="5" isTurn={isTurn} clickCallback={clickHandler} state={state}/>
+          <TicTacToeBox id="6" isTurn={isTurn} clickCallback={clickHandler} state={state}/>
         </TTTRow>
         <TTTRow>
-          <TicTacToeBox id="7" clickCallback={clickHandler} state={state}/>
-          <TicTacToeBox id="8" clickCallback={clickHandler} state={state}/>
-          <TicTacToeBox id="9" clickCallback={clickHandler} state={state}/>
+          <TicTacToeBox id="7" isTurn={isTurn} clickCallback={clickHandler} state={state}/>
+          <TicTacToeBox id="8" isTurn={isTurn} clickCallback={clickHandler} state={state}/>
+          <TicTacToeBox id="9" isTurn={isTurn} clickCallback={clickHandler} state={state}/>
         </TTTRow>
       </MainContainer>
+      <Name><span style={{color: "red"}}>{state.playerXID}</span>{" vs "}<span style={{color: "blue"}}>{state.playerOID}</span></Name>
     </div>
   )
 }

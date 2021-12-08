@@ -1,4 +1,4 @@
-#### Tic Tac Toe: The Multiplayer Version
+# Tic Tac Toe: The Multiplayer Version
 A quick project to practice creating a multiplayer typescript tictactoe game. It is NOT in good shape.
 - There is a LOT of code redundancy AND some unused code.
 - Interacting with the board feels like crap.
